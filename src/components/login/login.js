@@ -37,7 +37,7 @@ export default function Login({ setToken }) {
                     <input type="text" name="" placeholder="Usuário" onChange={e => setUserName(e.target.value)}/> 
                     <input type="password" name="" placeholder="Senha" onChange={e => setPassword(e.target.value)}/> 
                     <input type="submit" name="" value="Entrar" href="#" />
-                    <button value="Registrar" type="button" onClick={() => { console.log('redireciona cadastro') }}> Registrar </button>
+                    <button value="Registrar" type="button" onClick={() => { window.location.replace("/cadastro"); }}> Registrar </button>
                 </form>
           </div>
       </div>
