@@ -1,5 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import Usuarios from '../components/usuarios';
+
+
 const Home = () => {
 const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -29,20 +31,33 @@ if (error) {
 
         if(token != null) {
             if(token.token === "admin") {
-                adminText = "Você é um administrador do sistema."
+                adminText = " Você é um administrador do sistema."
             } else {
                 adminText = ""
             }
 
 
         }
+        
+
+        function logOut() {
+            sessionStorage.removeItem('token');            
+            window.location.reload();
+        }
 
         return (
-            <div>
-                <h2>Seja bem-vindo. </h2>
-
-                <h4>{adminText}</h4>
-                
+            <div className="container">
+                <div className="row">
+                    <div className="col-sm">
+                        <h3>
+                            Seja bem-vindo. 
+                            <small className="text-muted">{adminText}</small>
+                        </h3>
+                    </div>
+                    <div className="col-1">
+                        <button type="button" className="btn btn-dark" onClick={logOut}>Sair</button>
+                    </div>
+                </div>
                 <Usuarios usuarios={users} />
             </div>
         );
