@@ -8,19 +8,11 @@ import {
 import Home from './home';
 import Usuario from './usuario';
 import Login from '../components/login/login';
+import AtualizarToken from '../AtualizarToken';
 
-function setToken(userToken) {
-    sessionStorage.setItem('token', JSON.stringify(userToken));
-}
-
-function getToken() {
-    const tokenString = sessionStorage.getItem('token');
-    const userToken = JSON.parse(tokenString);
-    return userToken?.token
-}
 
 const Paginas = () => {
-    const token = getToken();
+    const { token, setToken } = AtualizarToken();
 
     if(!token) {
         return <Login setToken={setToken} />

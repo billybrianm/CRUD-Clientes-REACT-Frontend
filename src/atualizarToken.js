@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function atualizarToken() {
+export default function AtualizarToken() {
     const getToken = () => {
         const tokenString = sessionStorage.getItem('token');
         const userToken = JSON.parse(tokenString);
