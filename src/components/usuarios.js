@@ -1,7 +1,6 @@
     // src/components/usuarios.js
 
     import React from 'react'
-    import Usuario from '../paginas/usuario'
     import { useHistory } from "react-router-dom";
 
     const Usuarios = ({ usuarios }) => {
