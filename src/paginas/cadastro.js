@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import InputMask from 'react-input-mask';
 import ReactDOM from "react-dom";
 import validator from 'validator'
@@ -38,17 +38,14 @@ const Cadastro = () => {
     // handle click event of the Remove button
     const handleEmailRemove = index => {
 
-        console.log("Index: "+index);
 
         const list = [...emailList];
-        console.log(list);
         list.splice(index, 1);
         setEmailList(list);
     };
     
     // handle click event of the Add button
     const handleEmailAdd = () => {
-        console.log(emailList);
         setEmailList([...emailList, { email: ""}]);
     };
 
@@ -70,13 +67,8 @@ const Cadastro = () => {
     
     // handle click event of the Add button
     const handleAddClick = () => {
-        console.log(inputList);
         setInputList([...inputList, { firstName: "", lastName: "" }]);
     };
-
-    useEffect(() => {
-        console.log({ myRef }); // myRef.current;
-      }, [myRef]);
 
 
 return(
