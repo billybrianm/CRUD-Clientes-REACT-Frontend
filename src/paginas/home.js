@@ -23,8 +23,31 @@ if (error) {
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
+
+        let isAdmin = false;
+
+        let token = JSON.parse(sessionStorage.getItem('token'));
+        let adminText = "";
+
+        if(token != null) {
+            if(token.token === "admin") {
+                isAdmin = true;
+                adminText = "Você é um administrador do sistema."
+            } else {
+                adminText = ""
+            }
+
+
+        }
+
         return (
-            <Usuarios usuarios={users} />
+            <div>
+                <h2>Seja bem-vindo. </h2>
+
+                <h4>{adminText}</h4>
+                
+                <Usuarios usuarios={users} />
+            </div>
         );
     }
 }
