@@ -17,18 +17,24 @@ const Cadastro = () => {
 
     const validateEmail = (e, index) => {
         var email = e.target.value
-    
-        if (validator.isEmail(email)) { // valido
-            
-        } else { // invalido
-            
-        }
-
         const { name, value } = e.target;
         const list = [...emailList];
         list[index].email = value;
         setEmailList(list);
 
+        if (validator.isEmail(email)) { // valido
+            return true;
+        } else { // invalido
+            return false;
+        }
+    }
+
+    const emailValido = (email) => {
+        if (validator.isEmail(email)) { // valido
+            return true;
+        } else { // invalido
+            return false;
+        }
     }
 
     const handleChange = e => setVal(e.target.value);
@@ -45,8 +51,15 @@ const Cadastro = () => {
     };
     
     // handle click event of the Add button
-    const handleEmailAdd = () => {
-        setEmailList([...emailList, { email: ""}]);
+    const handleEmailAdd = (e, index) => {
+
+        console.log(index);
+
+        if(validateEmail(e, index)) {
+            setEmailList([...emailList, { email: ""}]);
+        } else {
+            console.log("E-mail inválido");
+        }
     };
 
 
@@ -119,7 +132,7 @@ return(
                             <div key={i} className="side-by-side">
                                 <input type="text" placeholder="Digite seu e-mail..." value={x.email} onChange={(e) => validateEmail(e, i)}/> 
                                 {emailList.length !== 1 && <button className="mr10" type="button" id={i} onClick={() => handleEmailRemove(i)}>-</button>}
-                                {emailList.length - 1 === i && <button type="button" onClick={handleEmailAdd}>+</button>}
+                                {emailList.length - 1 === i && <button type="button" onClick={(e) => handleEmailAdd(e, x)}>+</button>}
                             </div>
                             );
                         })}
