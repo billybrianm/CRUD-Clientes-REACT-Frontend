@@ -10,7 +10,7 @@
  
 
         function botao(index) {
-            if(JSON.parse(sessionStorage.getItem('token')).token !== "admin") {
+            if(JSON.parse(sessionStorage.getItem('token')).token === "admin") {
                 return <button onClick={() => { history.push('/usuario/' + index) }} className="btn btn-primary">Editar</button>;
             } else {
                 return "";
