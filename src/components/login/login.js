@@ -28,21 +28,19 @@ export default function Login({ setToken }) {
   }
 
   return(
-    <div className="login-form">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <p>Usuario</p>
-          <input type="text" onChange={e => setUserName(e.target.value)}/>
-        </label>
-        <label>
-          <p>Senha</p>
-          <input type="password" onChange={e => setPassword(e.target.value)}/>
-        </label>
-        <div>
-          <button type="submit">Entrar</button>
-        </div>
-      </form>
+    <div className="container">
+      <div className="row">
+          <div className="col-md-6">
+                <form onSubmit={handleSubmit} className="box">
+                    <h1>Login</h1>
+                    <p className="text-muted"> Digite seu usuário e sua senha</p> 
+                    <input type="text" name="" placeholder="Usuário" onChange={e => setUserName(e.target.value)}/> 
+                    <input type="password" name="" placeholder="Senha" onChange={e => setPassword(e.target.value)}/> 
+                    <input type="submit" name="" value="Entrar" href="#" />
+                    <button value="Registrar" type="button" onClick={() => { console.log('redireciona cadastro') }}> Registrar </button>
+                </form>
+          </div>
+      </div>
     </div>
   )
 }
