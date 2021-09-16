@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,8 +9,18 @@ import Home from './home';
 import Usuario from './usuario';
 import Login from '../components/login/login';
 
+function setToken(userToken) {
+    sessionStorage.setItem('token', JSON.stringify(userToken));
+}
+
+function getToken() {
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+}
+
 const Paginas = () => {
-    const [token, setToken] = useState();
+    const token = getToken();
 
     if(!token) {
         return <Login setToken={setToken} />
