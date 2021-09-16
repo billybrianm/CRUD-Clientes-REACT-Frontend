@@ -1,13 +1,17 @@
     // src/components/usuarios.js
 
     import React from 'react'
+    import Usuario from '../paginas/usuario'
+    import { useHistory } from "react-router-dom";
 
     const Usuarios = ({ usuarios }) => {
+
+        const history = useHistory();
  
 
         function botao(index) {
-            if(JSON.parse(sessionStorage.getItem('token')).token != "admin") {
-                return <button onClick={console.log(index)} className="btn btn-primary">Editar</button>;
+            if(JSON.parse(sessionStorage.getItem('token')).token !== "admin") {
+                return <button onClick={() => { history.push('/usuario/' + index) }} className="btn btn-primary">Editar</button>;
             } else {
                 return "";
             }
