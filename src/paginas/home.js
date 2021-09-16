@@ -24,14 +24,11 @@ if (error) {
         return <div>Loading...</div>;
     } else {
 
-        let isAdmin = false;
-
         let token = JSON.parse(sessionStorage.getItem('token'));
         let adminText = "";
 
         if(token != null) {
             if(token.token === "admin") {
-                isAdmin = true;
                 adminText = "Você é um administrador do sistema."
             } else {
                 adminText = ""
