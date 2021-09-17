@@ -79,6 +79,8 @@ const Cadastro = () => {
             'Content-Type': 'application/json',
             },
             body: JSON.stringify(usr)
+        }).then(() => {
+            window.location.replace("/");
         }).catch(error => console.warn(error));
     }
 
