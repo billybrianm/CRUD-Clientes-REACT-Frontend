@@ -3,8 +3,9 @@
     import React from 'react'
     import { useHistory } from "react-router-dom";
 
-    const Usuarios = ({ usuarios }) => {
+    import '../paginas/home.css';
 
+    const Usuarios = ({ usuarios }) => {
         const history = useHistory();
  
 
@@ -32,6 +33,18 @@
                 <p className="card-text"><b>Bairro:</b> {usuario.bairro}</p>
                 <p className="card-text"><b>Cidade:</b> {usuario.cidade}</p>
                 <p className="card-text"><b>UF:</b> {usuario.uf}</p>
+                <div className="card">
+                  <div className="card-body">
+                    <h6 className="card-title"><b>Telefone(s)</b></h6>
+                    {usuario.telefones.map((telefone, index) => (
+                      <div key={index}>
+                        <p className="card-text"><i>Número:</i> {usuario.telefones[0].numero}</p>
+                        <p className="card-text"><i>Tipo:</i> {usuario.telefones[0].tipoTelefone}</p>
+                        <hr/>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 {botao(index)}
               </div>
             </div>
