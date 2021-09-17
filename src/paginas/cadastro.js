@@ -17,7 +17,7 @@ const Cadastro = () => {
     const [emailList, setEmailList] = useState([{ email: ""}]);
     
     const { tipoSelecionado, setValue, register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => registrar(data);
 
     const [carregando, setCarregando] = React.useState(true);
     const [tiposTelefone, setTiposTelefone] = React.useState([
@@ -28,6 +28,66 @@ const Cadastro = () => {
     const [cep, setCep] = useState();
 
     const [telefoneMask, setTelefoneMask] = React.useState("(99)99999-9999");
+
+    const registrar = (data) => {
+        console.log(data);
+        let properties = Object.getOwnPropertyNames(data);
+        let count = 0;
+
+        for(let i = 0; i < properties.length; i++) {
+            if(properties[i].startsWith('email')) count++;
+        }
+
+        let tempcep = cep.replace(/\s/g, "");
+        let tempcpf = data.cpf.replace(/\./g, "").replace(/\-/g, "");
+        let temptel = data.telefones.replace(/\(/g, "").replace(/\)/g, "").replace(/\-/g, "");
+
+        let emails = [];
+
+        for(let i = 0; i < count; i++)
+            emails.push({ email: data['emails'+i] });
+
+        console.log(emails);
+        
+        let usr = 
+        {
+             usuario: data.usuario,
+             senha: data.senha,
+             nome: data.nome,
+             cpf: tempcpf,
+             cep: tempcep,
+             logradouro: data.logradouro,
+             bairro: data.bairro,
+             cidade: data.cidade,
+             uf: data.uf,
+             complemento: data.complemento,
+             telefones: [
+                 {
+                     numero: temptel                     
+                 }
+             ],
+             emails: emails,
+             admin: false
+        };
+
+        return fetch('/usuario',
+        {
+            method: "POST",
+            mode: 'cors',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(usr)
+        }).then((response) => response.json()).then((responseData) => {
+            setValue('logradouro', responseData.logradouro);
+            setValue('bairro', responseData.bairro);
+            setValue('cidade', responseData.localidade);
+            setValue('complemento', responseData.complemento);
+            setValue('uf', responseData.uf);
+
+        }).catch(error => console.warn(error));
+    }
 
     React.useEffect(() => {
         let unmounted = false;
@@ -242,13 +302,13 @@ return(
                   {emailList.map((x, i) => {
                             return (
                             <div key={i} className="side-by-side">
-                                <input type="text" {...register("emails"+i)} placeholder="Digite seu e-mail..." value={x.email} onChange={(e) => validateEmail(e, i)}/> 
+                                <input type="text" {...register("emails"+i, {required: true})} placeholder="Digite seu e-mail..." value={x.email} onChange={(e) => validateEmail(e, i)}/> 
                                 {emailList.length !== 1 && <button className="mr10" type="button" id={i} onClick={() => handleEmailRemove(i)}>-</button>}
                                 {emailList.length - 1 === i && <button type="button" onClick={(e) => handleEmailAdd(x, i)}>+</button>}
                             </div>
                             );
                         })}                
-                  {errors.emails?.type === 'required' && <span>Pelo menos um e-mail deve ser preenchido.<br/></span>}
+                  {errors.emails0?.type === 'required' && <span>Pelo menos um e-mail deve ser preenchido.<br/></span>}
                   <div className="side-by-side">
                     <button name="" value="Voltar" type="button" onClick={() => { window.location.replace("/"); }}> Voltar </button>
                     <input type="submit" name="" value="Registrar" />
