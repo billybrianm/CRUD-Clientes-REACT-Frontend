@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import InputMask from 'react-input-mask';
 import ReactDOM from "react-dom";
 import validator from 'validator'
+import { useForm } from "react-hook-form";
 
 import './cadastro.css';
 
@@ -14,6 +15,33 @@ const Cadastro = () => {
 
     const [telefoneList, setTelefoneList] = useState([{ telefone: "", tipoTelefone: "" }]);
     const [emailList, setEmailList] = useState([{ email: ""}]);
+    
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const onSubmit = data => console.log(data);
+
+    console.log(watch("example"));
+
+
+
+    let tiposTelefone;
+
+    const buscarTiposTelefone = async () => {
+        try {
+            fetch('/tipos-telefones')
+            .then(res => res.json())
+            .then((data) => {
+                tiposTelefone = data;
+              //this.setState({ contacts: data })
+            })
+            .catch(console.log)
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    React.useEffect(() => {
+        buscarTiposTelefone();
+    },[]);
 
     const validateEmail = (e, index) => {
         var email = e.target.value
@@ -88,44 +116,58 @@ return(
     <div className="container">
         <div className="row">
             <div className="col-md-6">
-              <form className="box">
+              <form className="box" onSubmit={handleSubmit(onSubmit)}>
                   <h1>Registro</h1>
                   <p className="text-muted"> Preencha os dados conforme requisitado</p> 
-                  <label className="" >Nome completo</label>
-                  <input type="text" name="" placeholder="Digite seu nome completo..." /> 
+                  <label className="" >Nome completo <span>*</span></label>
+                  <input type="text" name="" placeholder="Digite seu nome completo..." {...register("nome", { required: true, minLength: 3, maxLength: 100, pattern:/^[a-zA-Z0-9\s]+/ })} /> 
+                  {errors.nome?.type === 'required' && <span>O campo nome completo é obrigatório.<br/></span>}
+                  {errors.nome?.type === 'minLength' && <span>O nome deve conter no mínimo 3 caracteres.<br/></span>}
+                  {errors.nome?.type === 'maxLength' && <span>O nome deve conter no máximo 100 caracteres.<br/></span>}
+                  {errors.nome?.type === 'pattern' && <span>O nome só deve conter letras números e espaços.<br/></span>}
 
-                  <label className="" >Nome de usuário</label>
-                  <input type="text" name="" placeholder="Digite seu nome de usuário..." /> 
+                  <label className="" >Nome de usuário <span>*</span></label>
+                  <input type="text" name="" placeholder="Digite seu nome de usuário..." {...register("usuario", { required: true })}/> 
+                  {errors.usuario && <span>O campo nome de usuário é obrigatório.<br/></span>}
 
-                  <label className="" autoComplete="off" >Senha</label>
-                  <input type="password" name="" placeholder="Digite sua senha..." /> 
+                  <label className="" autoComplete="off" >Senha <span>*</span></label>
+                  <input type="password" name="" placeholder="Digite sua senha..." {...register("senha", { required: true })}/> 
+                  {errors.nome?.type === 'required' && <span>O campo senha é obrigatório.<br/></span>}
 
-                  <label className="" >CPF</label>
-                  <InputMask mask="999.999.999-99" onChange={handleChange} type="text" placeholder="Digite seu CPF..."/>
+                  <label className="" >CPF <span>*</span></label>
+                  <InputMask mask="999.999.999-99" onChange={handleChange} type="text" placeholder="Digite seu CPF..." {...register("cpf", { required: true })}/>
+                  {errors.nome?.type === 'required' && <span>O campo CPF é obrigatório.<br/></span>}
 
-                  <label className="" >CEP</label>
-                  <InputMask mask="99999-999" onChange={handleChangeCEP} type="text" placeholder="Digite seu CEP..." />
+                  <label className="" >CEP <span>*</span></label>
+                  <InputMask mask="99999-999" onChange={handleChangeCEP} type="text" placeholder="Digite seu CEP..." {...register("cep", { required: true })}/>
+                  {errors.nome?.type === 'required' && <span>O campo CEP é obrigatório.<br/></span>}
 
-                  <label className="" >Endereço</label>
-                  <input type="text" name="" placeholder="Digite seu logradouro..." /> 
+                  <label className="" >Endereço <span>*</span></label>
+                  <input type="text" name="" placeholder="Digite seu logradouro..." {...register("logradouro", { required: true })}/> 
+                  {errors.nome?.type === 'required' && <span>O campo endereço é obrigatório.<br/></span>}
 
-                  <label className="" >Bairro</label>
-                  <input type="text" name="" placeholder="Digite seu bairro..." /> 
+                  <label className="" >Bairro <span>*</span></label>
+                  <input type="text" name="" placeholder="Digite seu bairro..." {...register("bairro", { required: true })}/> 
+                  {errors.nome?.type === 'required' && <span>O campo bairro é obrigatório.<br/></span>}
 
-                  <label className="" >Cidade</label>
-                  <input type="text" name="" placeholder="Digite sua cidade..." /> 
+                  <label className="" >Cidade <span>*</span></label>
+                  <input type="text" name="" placeholder="Digite sua cidade..." {...register("cidade", { required: true })}/> 
+                  {errors.nome?.type === 'required' && <span>O campo cidade é obrigatório.<br/></span>}
 
-                  <label className="" >UF</label>
-                  <input type="text" name="" placeholder="Digite sua UF..." /> 
+                  <label className="" >UF <span>*</span></label>
+                  <input type="text" name="" placeholder="Digite sua UF..." {...register("uf", { required: true })}/> 
+                  {errors.nome?.type === 'required' && <span>O campo UF é obrigatório.<br/></span>}
 
-                  <label className="" >Telefone(s)</label>
+                  <label className="" {...register("telefones", { required: true })}>Telefone(s) <span>*</span></label>
+                  {errors.nome?.type === 'required' && <span>Pelo menos um telefone deve ser preenchido.<br/></span>}
                   
                   <div className="side-by-side">
                     <input type="text" placeholder="Digite seu telefone..." /> 
                     <input type="text" style={{width: 200}} name="" placeholder="Residencial" />
                     <button>+</button> 
                   </div>
-                  <label className="" >E-mail(s)</label>                  
+                  <label className="" {...register("emails", { required: true })}>E-mail(s) <span>*</span></label>   
+                  {errors.nome?.type === 'required' && <span>Pelo menos um e-mail deve ser preenchido.<br/></span>}               
 
                   {emailList.map((x, i) => {
                             return (
@@ -135,14 +177,7 @@ return(
                                 {emailList.length - 1 === i && <button type="button" onClick={(e) => handleEmailAdd(e, x)}>+</button>}
                             </div>
                             );
-                        })}
-                    
-
-
-                  
-
-
-                        
+                        })}                
                   
                   <div className="side-by-side">
                     <button name="" value="Voltar" type="button" onClick={() => { window.location.replace("/"); }}> Voltar </button>
