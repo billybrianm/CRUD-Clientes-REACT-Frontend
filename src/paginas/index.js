@@ -15,7 +15,7 @@ const Paginas = () => {
     const history = createBrowserHistory()
     const { token, setToken } = AtualizarToken();
 
-    if(!token) {
+    if(!token || token == "invalido") {
         if(history.location.pathname === '/cadastro') {
             return <Cadastro />
         } else {

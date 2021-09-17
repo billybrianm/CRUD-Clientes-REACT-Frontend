@@ -15,16 +15,22 @@ async function loginUser(credentials) {
 }
 
 export default function Login({ setToken }) {
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+  const [usuario, setUserName] = useState();
+  const [senha, setPassword] = useState();
+  const [erro, setErro] = useState();
 
   const handleSubmit = async e => {
     e.preventDefault();
     const token = await loginUser({
-      username,
-      password
+      usuario,
+      senha
     });
     setToken(token);
+    
+    if(token.token == "invalido") {
+      setErro(<span>Erro! Login ou senha inválidos.</span>);
+    }
+
   }
 
   return(
@@ -38,6 +44,7 @@ export default function Login({ setToken }) {
                     <input type="password" name="" placeholder="Senha" onChange={e => setPassword(e.target.value)}/> 
                     <input type="submit" name="" value="Entrar" href="#" />
                     <button value="Registrar" type="button" onClick={() => { window.location.replace("/cadastro"); }}> Registrar </button>
+                    {erro}  
                 </form>
           </div>
       </div>
