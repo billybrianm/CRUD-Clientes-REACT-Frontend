@@ -45,7 +45,7 @@
                     ))}
                   </div>
                 </div>
-                {botao(index)}
+                {botao(usuario.id)}
               </div>
             </div>
           ))}
