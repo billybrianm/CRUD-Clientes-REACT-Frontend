@@ -79,13 +79,6 @@ const Cadastro = () => {
             'Content-Type': 'application/json',
             },
             body: JSON.stringify(usr)
-        }).then((response) => response.json()).then((responseData) => {
-            setValue('logradouro', responseData.logradouro);
-            setValue('bairro', responseData.bairro);
-            setValue('cidade', responseData.localidade);
-            setValue('complemento', responseData.complemento);
-            setValue('uf', responseData.uf);
-
         }).catch(error => console.warn(error));
     }
 
