@@ -4,11 +4,14 @@ import { useHistory } from "react-router-dom";
 import './usuario.css';
 
 
-const Usuario = (id) => {
+const Usuario = (userid) => {
 
     const [usr, setUsr] = useState();
 
+    const [id, setId] = useState('');
     const [nomeCompleto, setNomeCompleto] = useState('');
+    const [usuario, setUsuario] = useState('');
+    const [senha, setSenha] = useState('');
     const [cpf, setCpf] = useState('');
     const [cep, setCep] = useState('');
     const [logradouro, setLogradouro] = useState('');
@@ -18,6 +21,7 @@ const Usuario = (id) => {
     const [uf, setUf] = useState('');
     const [telefones, setTelefones] = useState([]);
     const [emails, setEmails] = useState([]);
+    const [admin, setAdmin] = useState(false);
 
     const history = useHistory();
 
@@ -32,7 +36,7 @@ const Usuario = (id) => {
     React.useEffect(() => {
         let unmounted = false;
         async function buscarTiposTelefone() {
-            return fetch('/usuario/'+id.location.pathname.split('/')[2],
+            return fetch('/usuario/'+userid.location.pathname.split('/')[2],
         {
             method: "GET",
             headers: {
@@ -43,7 +47,10 @@ const Usuario = (id) => {
         }).then((response) => response.json()).then((responseData) => {
             console.log(responseData);
 
+            setId(responseData.id);
             setNomeCompleto(responseData.nome);
+            setUsuario(responseData.usuario);
+            setSenha(responseData.senha);
             setCpf(responseData.cpf);
             setCep(responseData.cep);
             setLogradouro(responseData.logradouro);
@@ -53,6 +60,7 @@ const Usuario = (id) => {
             setUf(responseData.uf);
             setTelefones(responseData.telefones);
             setEmails(responseData.emails);
+            setAdmin(responseData.admin);
 
         }).catch(error => console.warn(error));
         }
@@ -63,12 +71,47 @@ const Usuario = (id) => {
           };
     },[]);
 
-    const handleSubmit = () => {
+    const editar = (data) => {
+        console.log(data);
 
+        let usr = 
+        {
+            id: id,
+            usuario: usuario,
+            senha: senha,
+            nome: nomeCompleto,
+            cpf: cpf,
+            cep: cep,
+            logradouro: logradouro,
+            bairro: bairro,
+            cidade: cidade,
+            uf: uf,
+            complemento: complemento,
+            telefones: [
+                {
+                    numero: null                     
+                }
+            ],
+            emails: emails,
+            admin: admin
+        };
+
+        return fetch('/usuario/'+userid.location.pathname.split('/')[2],
+        {
+            method: "PUT",
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(usr)
+        }).then((response) => {
+            alert('Editado com sucesso!');
+        }).catch(error => console.warn(error));
     }
 
     
     const handleNomeCompleto = (event) => setNomeCompleto(event.target.value);
+    const handleUsuario = (event) => setUsuario(event.target.value);
     const handleCPF = (event) => setCpf(event.target.value);
     const handleCEP = (event) => setCep(event.target.value);
     const handleLogradouro = (event) => setLogradouro(event.target.value);
@@ -77,6 +120,7 @@ const Usuario = (id) => {
     const handleCidade = (event) => setCidade(event.target.value);
     const handleUf = (event) => setUf(event.target.value);
     const handleTelefone = (event) => setTelefones(event.target.value);
+    const handleEmail = (event) => setEmails(event.target.value);
 
     
 
@@ -84,13 +128,15 @@ return(
     <div>
         <center><h1>Detalhes do Usuário</h1></center>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={editar}>
                 <div className="card" id="detalhes">
                     <div className="card-body">
                         <h5 className="card-title"> </h5>
                         <h6 className="card-subtitle mb-2 text-muted"> </h6>
                         <p className="card-text"><b>Nome completo:</b></p>
                         <input type="text" value={nomeCompleto} onChange={handleNomeCompleto}/>
+                        <p className="card-text"><b>Usuário:</b></p>
+                        <input type="text" value={usuario} onChange={handleUsuario}/>
                         <p className="card-text"><b>CPF:</b></p>
                         <input type="text" value={cpf} onChange={handleCPF}/>
                         <p className="card-text"><b>CEP:</b></p>
@@ -117,8 +163,17 @@ return(
                                     <hr />
                                 </div>
                             })}
+                            <h6 className="card-title"><b>Emails(s)</b></h6>
+                            {emails.map((em, id) => {
+                                <div key={id}>
+                                    <p className="card-text"> Email </p>
+                                    <input type="text" value={em.email} onChange={handleEmail} />
+                                    <hr />
+                                </div>
+                            })}
                         </div>
-                        <button onClick={() => { history.push('/') }} className="btn btn-primary">Editar</button>
+                        <button type="submit" className="btn btn-primary">Editar</button>
+                        <button onClick={() => { history.push('/') }} className="btn btn-secondary" >Voltar</button>
                     </div>
                 </div>
             </div>
