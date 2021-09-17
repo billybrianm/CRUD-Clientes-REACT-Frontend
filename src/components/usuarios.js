@@ -29,7 +29,7 @@
                 <p className="card-text"><b>CPF:</b> {usuario.cpf}</p>
                 <p className="card-text"><b>CEP:</b> {usuario.cep}</p>
                 <p className="card-text"><b>Endereço:</b> {usuario.logradouro}</p>
-                <p className="card-text"><b>Complemento:</b> {usuario.cpf}</p>
+                <p className="card-text"><b>Complemento:</b> {usuario.complemento}</p>
                 <p className="card-text"><b>Bairro:</b> {usuario.bairro}</p>
                 <p className="card-text"><b>Cidade:</b> {usuario.cidade}</p>
                 <p className="card-text"><b>UF:</b> {usuario.uf}</p>
