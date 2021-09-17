@@ -1,18 +1,19 @@
 import React, { useState, useEffect }  from 'react';
 import Usuarios from '../components/usuarios';
 
+import './home.css';
 
 const Home = () => {
 const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        fetch("/api/usuarios")
+        fetch("/usuarios")
             .then(res => res.json())
             .then(
                 (data) => {
                     setIsLoaded(true);
-                    setUsers(data._embedded.usuarios);
+                    setUsers(data);
                 },
                 (error) => {
                     setIsLoaded(true);
