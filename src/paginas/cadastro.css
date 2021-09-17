@@ -33,6 +33,32 @@ body {
     transition: 0.25s
 }
 
+.box select {
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 10px 10px;
+    width: 700px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+}
+
+.box select option {
+    font-family: sans-serif;
+    margin: 40px;
+    background: #191919;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
 .box h1 {
     color: white;
     text-transform: uppercase;

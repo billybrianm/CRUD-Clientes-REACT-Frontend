@@ -19,28 +19,33 @@ const Cadastro = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = data => console.log(data);
 
-    console.log(watch("example"));
-
-
-
-    let tiposTelefone;
-
-    const buscarTiposTelefone = async () => {
-        try {
-            fetch('/tipos-telefones')
-            .then(res => res.json())
-            .then((data) => {
-                tiposTelefone = data;
-              //this.setState({ contacts: data })
-            })
-            .catch(console.log)
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    const [carregando, setCarregando] = React.useState(true);
+    const [tiposTelefone, setTiposTelefone] = React.useState([
+        { label: "Carregando ...", value: "" }
+      ]);
+    const [valorTiposTelefone, setValorTiposTelefone] = React.useState("CELULAR");
 
     React.useEffect(() => {
+        let unmounted = false;
+        async function buscarTiposTelefone() {
+            const response = await fetch("/tipos-telefones");
+            const body = await response.json();
+
+            if (!unmounted) {
+                let obj = [];
+                body.forEach(element => {
+                    obj.push({label: element, value: element});
+                    setTiposTelefone(obj)
+                });
+                setCarregando(false);
+            }
+            //setTiposTelefone(body.results.map(({ name }) => ({ label: name, value: name })));
+        }
+        
         buscarTiposTelefone();
+        return () => {
+            unmounted = true;
+          };
     },[]);
 
     const validateEmail = (e, index) => {
@@ -69,25 +74,36 @@ const Cadastro = () => {
 
     const handleChangeCEP = e => setVal(e.target.value);
 
-    // handle click event of the Remove button
     const handleEmailRemove = index => {
-
-
         const list = [...emailList];
         list.splice(index, 1);
         setEmailList(list);
     };
-    
-    // handle click event of the Add button
-    const handleEmailAdd = (e, index) => {
 
-        console.log(index);
+    const handleEmailAdd = (e, index) => {
 
         if(validateEmail(e, index)) {
             setEmailList([...emailList, { email: ""}]);
         } else {
             console.log("E-mail inválido");
         }
+    };
+
+    const handleTelefoneChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...telefoneList];
+        list[index][name] = value;
+        setTelefoneList(list);
+      };
+
+    const handleTelefoneRemove = index => {
+        const list = [...telefoneList];
+        list.splice(index, 1);
+        setTelefoneList(list);
+    };
+    
+    const handleTelefoneAdd = (e, index) => {
+        setTelefoneList([...telefoneList, { telefone: "", tipoTelefone: "" }]);
     };
 
 
@@ -159,15 +175,26 @@ return(
                   {errors.nome?.type === 'required' && <span>O campo UF é obrigatório.<br/></span>}
 
                   <label className="" {...register("telefones", { required: true })}>Telefone(s) <span>*</span></label>
-                  {errors.nome?.type === 'required' && <span>Pelo menos um telefone deve ser preenchido.<br/></span>}
-                  
+
+
                   <div className="side-by-side">
                     <input type="text" placeholder="Digite seu telefone..." /> 
-                    <input type="text" style={{width: 200}} name="" placeholder="Residencial" />
+                    <select style={{width: 200}}
+                        disabled={carregando}
+                        value={valorTiposTelefone}
+                        onChange={e => setValorTiposTelefone(e.currentTarget.value)}>
+
+                        {tiposTelefone.map(({ label, value }) => (
+                            <option key={value} value={value}>
+                            {label}
+                            </option>
+                        ))}
+                    </select>
                     <button>+</button> 
                   </div>
-                  <label className="" {...register("emails", { required: true })}>E-mail(s) <span>*</span></label>   
-                  {errors.nome?.type === 'required' && <span>Pelo menos um e-mail deve ser preenchido.<br/></span>}               
+                  {errors.nome?.type === 'required' && <span>Pelo menos um telefone deve ser preenchido.<br/></span>}
+
+                  <label className="" {...register("emails", { required: true })}>E-mail(s) <span>*</span></label>                                    
 
                   {emailList.map((x, i) => {
                             return (
@@ -178,7 +205,7 @@ return(
                             </div>
                             );
                         })}                
-                  
+                  {errors.nome?.type === 'required' && <span>Pelo menos um e-mail deve ser preenchido.<br/></span>}
                   <div className="side-by-side">
                     <button name="" value="Voltar" type="button" onClick={() => { window.location.replace("/"); }}> Voltar </button>
                     <input type="submit" name="" value="Registrar" href="#" />
